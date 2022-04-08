@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  codebarre: MyString
+  nom: MyString
+  pa: 1
+  pv: 1
+  qte: 1
+  famille: one
+
+two:
+  codebarre: MyString
+  nom: MyString
+  pa: 1
+  pv: 1
+  qte: 1
+  famille: two
