@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Produit Magasins</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Qte</th>
+      <th>Produit</th>
+      <th>Magasin</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @produit_magasins.each do |produit_magasin| %>
+      <tr>
+        <td><%= produit_magasin.qte %></td>
+        <td><%= produit_magasin.produit_id %></td>
+        <td><%= produit_magasin.magasin_id %></td>
+        <td><%= link_to 'Show', produit_magasin %></td>
+        <td><%= link_to 'Edit', edit_produit_magasin_path(produit_magasin) %></td>
+        <td><%= link_to 'Destroy', produit_magasin, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Produit Magasin', new_produit_magasin_path %>

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do  
+  resources :produit_magasins
   resources :roles
   resources :magasins
   resources :venteproduits
