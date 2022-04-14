@@ -25,8 +25,6 @@ class ProduitsController < ApplicationController
         end
          
      end
-
-     abort @produit.inspect
     if @error == nil
       if @produit.save
         render json: @produit, status: :created, location: @produit

@@ -10,15 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_07_181751) do
+ActiveRecord::Schema.define(version: 2022_04_13_101047) do
 
-  create_table "familles", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "familles", force: :cascade do |t|
     t.string "nom"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "inventairestocks", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "inventairestocks", force: :cascade do |t|
     t.bigint "produit_id", null: false
     t.integer "quantite", default: 0
     t.datetime "created_at", precision: 6, null: false
@@ -28,7 +31,7 @@ ActiveRecord::Schema.define(version: 2021_07_07_181751) do
     t.index ["user_id"], name: "index_inventairestocks_on_user_id"
   end
 
-  create_table "magasins", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "magasins", force: :cascade do |t|
     t.integer "stock"
     t.integer "pa"
     t.integer "limite"
@@ -38,7 +41,17 @@ ActiveRecord::Schema.define(version: 2021_07_07_181751) do
     t.index ["produit_id"], name: "index_magasins_on_produit_id"
   end
 
-  create_table "produits", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "produit_magasins", force: :cascade do |t|
+    t.integer "qte"
+    t.bigint "produit_id", null: false
+    t.bigint "magasin_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["magasin_id"], name: "index_produit_magasins_on_magasin_id"
+    t.index ["produit_id"], name: "index_produit_magasins_on_produit_id"
+  end
+
+  create_table "produits", force: :cascade do |t|
     t.string "codebarre"
     t.string "nom"
     t.string "image"
@@ -53,13 +66,13 @@ ActiveRecord::Schema.define(version: 2021_07_07_181751) do
     t.index ["user_id"], name: "index_produits_on_user_id"
   end
 
-  create_table "roles", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "roles", force: :cascade do |t|
     t.string "nom"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "email"
     t.boolean "confirmed", default: false
@@ -73,7 +86,7 @@ ActiveRecord::Schema.define(version: 2021_07_07_181751) do
     t.index ["role_id"], name: "index_users_on_role_id"
   end
 
-  create_table "venteproduits", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "venteproduits", force: :cascade do |t|
     t.bigint "produit_id", null: false
     t.bigint "vente_id", null: false
     t.integer "qte", default: 0
@@ -83,7 +96,7 @@ ActiveRecord::Schema.define(version: 2021_07_07_181751) do
     t.index ["vente_id"], name: "index_venteproduits_on_vente_id"
   end
 
-  create_table "ventes", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "ventes", force: :cascade do |t|
     t.integer "montant"
     t.integer "qte", default: 0
     t.datetime "created_at", precision: 6, null: false
@@ -97,6 +110,8 @@ ActiveRecord::Schema.define(version: 2021_07_07_181751) do
   add_foreign_key "inventairestocks", "produits"
   add_foreign_key "inventairestocks", "users"
   add_foreign_key "magasins", "produits"
+  add_foreign_key "produit_magasins", "magasins"
+  add_foreign_key "produit_magasins", "produits"
   add_foreign_key "produits", "familles"
   add_foreign_key "produits", "users"
   add_foreign_key "users", "roles"
