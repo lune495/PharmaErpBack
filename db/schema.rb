@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_13_101047) do
+ActiveRecord::Schema.define(version: 2022_04_17_155545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(version: 2022_04_13_101047) do
     t.index ["produit_id"], name: "index_magasins_on_produit_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "produit_id", null: false
+    t.text "contenu"
+    t.boolean "etat", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["produit_id"], name: "index_notifications_on_produit_id"
+  end
+
   create_table "produit_magasins", force: :cascade do |t|
     t.integer "qte"
     t.bigint "produit_id", null: false
@@ -62,6 +71,8 @@ ActiveRecord::Schema.define(version: 2022_04_13_101047) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id", null: false
+    t.date "date_peremtion"
+    t.integer "intervalle_notif", default: 0
     t.index ["famille_id"], name: "index_produits_on_famille_id"
     t.index ["user_id"], name: "index_produits_on_user_id"
   end
@@ -110,6 +121,7 @@ ActiveRecord::Schema.define(version: 2022_04_13_101047) do
   add_foreign_key "inventairestocks", "produits"
   add_foreign_key "inventairestocks", "users"
   add_foreign_key "magasins", "produits"
+  add_foreign_key "notifications", "produits"
   add_foreign_key "produit_magasins", "magasins"
   add_foreign_key "produit_magasins", "produits"
   add_foreign_key "produits", "familles"

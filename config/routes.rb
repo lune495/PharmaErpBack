@@ -1,4 +1,5 @@
 Rails.application.routes.draw do  
+  resources :notifications
   resources :produit_magasins
   resources :roles
   resources :magasins
