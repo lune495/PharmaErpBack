@@ -14,14 +14,25 @@ class Produit < ApplicationRecord
 
   def self.notifications
     #puts 'Hi Alioune Badara'
+
     Produit.all.each do |produit|
       @notification = Notification.new
       @notification.produit_id  =  produit.id
-      if(produit.date_peremtion - Date.today == produit.intervalle_notif)
-           @notification.contenu  =  "Le produit #{produit.nom} expire dans #{produit.intervalle_notif} jours "
-      end 
-      @notification.etat  =  0
-      @notification.save
+      @error = nil
+
+      Notification.all.each do |notif|
+        if notif.produit_id == produit.id
+          @error = "existe deja"
+          break
+        end
+      end
+      if @error == nil
+        if produit.date_peremtion - Date.today == produit.intervalle_notif
+          @notification.contenu  =  "Le produit #{produit.nom} expire dans #{produit.intervalle_notif} jours "
+          @notification.etat  =  0
+          @notification.save
+        end 
+      end
       # puts "Contenu : #{@notification.contenu}"
     end
   end
@@ -29,14 +40,15 @@ class Produit < ApplicationRecord
   def self.rappel_notif
     #puts 'Hi Alioune Badara'
     Produit.all.each do |produit|
-      @notification = Notification.new
-      @notification.produit_id  =  produit.id
-      if(produit.date_peremtion - Date.today == 2)
-           @notification.contenu  =  "Rappel ! il ne reste que 5 jour pour le produit #{produit.nom} "
-      end 
-      @notification.etat  =  0
-      @notification.save
-      # puts "Contenu2 : #{@notification.contenu}"
+      Notification.all.each do |notif|
+        if notif.produit_id == produit.id && produit.date_peremtion - Date.today == 5
+          notif.contenu  =  "Rappel ! il ne reste que 5 jour pour le produit #{produit.nom} "
+          notif.etat  =  0
+          notif.save
+          break
+        end
+      end
+      #puts "Contenu2 : #{produit.date_peremtion - Date.today} "
     end
   end
 end
